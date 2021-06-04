@@ -47,11 +47,13 @@ public class PlayerMovementListener implements Listener {
 					kickBack(player, e.getFrom());
 				}
 			} else {
-				if (canLeaveArea(player, areaPlayer.getCurrentArea())) {
-					areaPlayer.updateCurrentArea(currentArea);
-				} else {
-					areaPlayer.sendMessage("&c&lAreaProtection &7Non puoi uscire da questa area!");
-					kickBack(player, e.getFrom());
+				if (areaPlayer.getCurrentArea() != null) {
+					if (canLeaveArea(player, areaPlayer.getCurrentArea())) {
+						areaPlayer.updateCurrentArea(currentArea);
+					} else {
+						areaPlayer.sendMessage("&c&lAreaProtection &7Non puoi uscire da questa area!");
+						kickBack(player, e.getFrom());
+					}
 				}
 			}
 		}
