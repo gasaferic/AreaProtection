@@ -25,6 +25,7 @@ import com.gasaferic.areaprotection.main.Main;
 import com.gasaferic.areaprotection.model.Area;
 import com.gasaferic.areaprotection.model.AreaFlag;
 import com.gasaferic.areaprotection.model.AreaFlags;
+import com.gasaferic.areaprotection.model.MessageAreaFlag;
 import com.gasaferic.areaprotection.model.Selection;
 
 public class AreaLoader {
@@ -48,7 +49,7 @@ public class AreaLoader {
 	public Area areaFromJSONObj(JSONObject areaJSONObj) {
 
 		String areaName = (String) areaJSONObj.get("areaName");
-		
+
 		OfflinePlayer areaOwner = Bukkit.getOfflinePlayer(UUID.fromString((String) areaJSONObj.get("areaOwnerUUID")));
 
 		Selection selection = new Selection();
@@ -64,12 +65,22 @@ public class AreaLoader {
 		JSONArray areaFlagsArray = (JSONArray) areaJSONObj.get("areaFlags");
 
 		JSONObject currentAreaFlagJSONObj = null;
+
+		AreaFlagTypes areaFlagType;
 		AreaFlag currentAreaFlag = null;
 
 		for (Object areaFlagObj : areaFlagsArray) {
 			currentAreaFlagJSONObj = (JSONObject) areaFlagObj;
-			currentAreaFlag = new AreaFlag(AreaFlagTypes.valueOf((String) currentAreaFlagJSONObj.get("flagName")),
-					(boolean) currentAreaFlagJSONObj.get("allow"));
+			areaFlagType = AreaFlagTypes.valueOf((String) currentAreaFlagJSONObj.get("flagName"));
+
+			if (areaFlagType.equals(AreaFlagTypes.GREET_ON_ENTER)
+					|| areaFlagType.equals(AreaFlagTypes.GREET_ON_LEAVE)) {
+				currentAreaFlag = new MessageAreaFlag(areaFlagType, (boolean) currentAreaFlagJSONObj.get("allow"),
+						(String) currentAreaFlagJSONObj.get("message"));
+			} else {
+				currentAreaFlag = new AreaFlag(areaFlagType, (boolean) currentAreaFlagJSONObj.get("allow"));
+			}
+			
 			boolean success = areaFlags.addAreaFlag(currentAreaFlag);
 			if (!success) {
 				Bukkit.getConsoleSender().sendMessage("§7§lDuplicated entry for §c§l"

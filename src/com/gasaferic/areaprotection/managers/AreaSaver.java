@@ -14,10 +14,12 @@ import org.bukkit.util.Vector;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.gasaferic.areaprotection.enums.AreaFlagTypes;
 import com.gasaferic.areaprotection.main.Main;
 import com.gasaferic.areaprotection.model.Area;
 import com.gasaferic.areaprotection.model.AreaFlag;
 import com.gasaferic.areaprotection.model.AreaFlags;
+import com.gasaferic.areaprotection.model.MessageAreaFlag;
 
 public class AreaSaver {
 
@@ -84,6 +86,9 @@ public class AreaSaver {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("flagName", areaFlag.getAreaFlagType().toString());
 			jsonObject.put("allow", areaFlag.isAllowed());
+			if (areaFlag.getAreaFlagType().equals(AreaFlagTypes.GREET_ON_ENTER) || areaFlag.getAreaFlagType().equals(AreaFlagTypes.GREET_ON_LEAVE)) {
+				jsonObject.put("message", ((MessageAreaFlag) areaFlag).getMessage());
+			}
 			areaFlagsJSONArray.add(jsonObject);
 		}
 

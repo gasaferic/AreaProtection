@@ -15,6 +15,7 @@ import com.gasaferic.areaprotection.model.Area;
 import com.gasaferic.areaprotection.model.AreaFlag;
 import com.gasaferic.areaprotection.model.AreaFlags;
 import com.gasaferic.areaprotection.model.AreaPlayer;
+import com.gasaferic.areaprotection.model.MessageAreaFlag;
 
 public class AreaCommand implements CommandExecutor {
 
@@ -128,16 +129,62 @@ public class AreaCommand implements CommandExecutor {
 					} else {
 						boolean allow = Boolean.valueOf(args[3]);
 
-						AreaFlag areaFlag = null;
+						AreaFlag areaFlag = areaFlags.getAreaFlagByExactFlagType(areaFlagType);
 
-						if ((areaFlag = areaFlags.getAreaFlagByExactFlagType(areaFlagType)) != null) {
-							areaFlag.setAllowed(allow);
-							areaPlayer.sendMessage(
-									"&c&lGestione Area &f&l> &7Aggiornata la regola " + args[2] + " a " + allow);
+						if (!(areaFlagType.equals(AreaFlagTypes.GREET_ON_ENTER)
+								|| areaFlagType.equals(AreaFlagTypes.GREET_ON_LEAVE))) {
+							if (areaFlag != null) {
+								areaFlag.setAllowed(allow);
+								areaPlayer.sendMessage(
+										"&c&lGestione Area &f&l> &7Aggiornata la regola " + args[2] + " a " + allow);
+							} else {
+								areaFlags.addAreaFlag(new AreaFlag(areaFlagType, allow));
+								areaPlayer.sendMessage(
+										"&c&lGestione Area &f&l> &7Aggiunta la regola " + args[2] + " a " + allow);
+							}
 						} else {
-							areaFlags.addAreaFlag(new AreaFlag(areaFlagType, allow));
-							areaPlayer.sendMessage(
-									"&c&lGestione Area &f&l> &7Aggiunta la regola " + args[2] + " a " + allow);
+							if (areaFlag != null) {
+								areaFlag.setAllowed(allow);
+								if (args.length > 4) {
+									StringBuilder stringBuilder = new StringBuilder();
+
+									for (int i = 4; i < args.length; i++) {
+										stringBuilder.append(args[i] + (i < args.length - 1 ? " " : ""));
+									}
+
+									((MessageAreaFlag) areaFlag).setMessage(stringBuilder.toString());
+									areaPlayer.sendMessage(
+											"&c&lGestione Area &f&l> &7Aggiornata la regola " + args[2] + " a " + allow
+													+ " , con il messaggio &r'" + stringBuilder.toString() + "&r'");
+								} else {
+									((MessageAreaFlag) areaFlag).setMessage(null);
+									areaPlayer.sendMessage(
+											"&c&lGestione Area &f&l> &7Aggiornata la regola " + args[2] + " a " + allow
+													+ " , con il messaggio " + (args.length > 4 ? args[4] : "default"));
+								}
+							} else {
+								if (args.length > 4) {
+									StringBuilder stringBuilder = new StringBuilder();
+
+									for (int i = 4; i < args.length; i++) {
+										stringBuilder.append(args[i] + (i < args.length - 1 ? " " : ""));
+									}
+
+									areaFlags.addAreaFlag(
+											new MessageAreaFlag(areaFlagType, allow, stringBuilder.toString()));
+									areaPlayer.sendMessage(
+											"&c&lGestione Area &f&l> &7Aggiunta la regola " + args[2] + " a " + allow
+													+ " , con il messaggio &r'" + stringBuilder.toString() + "&r'");
+
+								} else {
+									areaFlags.addAreaFlag(new MessageAreaFlag(areaFlagType, allow, null));
+									areaPlayer.sendMessage(
+											"&c&lGestione Area &f&l> &7Aggiornata la regola " + args[2] + " a " + allow
+													+ " , con il messaggio " + (args.length > 4 ? args[4] : "default"));
+								}
+
+							}
+
 						}
 					}
 				}

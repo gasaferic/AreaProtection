@@ -2,7 +2,7 @@ package com.gasaferic.areaprotection.enums;
 
 public enum AreaFlagTypes {
 	
-	BUILD, BREAK, ENTER, LEAVE, DROP_ITEM, PICKUP_ITEM, BLOCK_INTERACT;
+	BUILD, BREAK, ENTER, LEAVE, DROP_ITEM, PICKUP_ITEM, BLOCK_INTERACT, GREET_ON_ENTER, GREET_ON_LEAVE;
 
 	public static String getAvailableFlags() {
 		StringBuilder stringBuilder = new StringBuilder();
