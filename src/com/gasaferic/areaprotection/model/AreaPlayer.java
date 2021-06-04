@@ -40,9 +40,12 @@ public class AreaPlayer {
 	private ItemStack[] inventoryContents;
 
 	public AreaPlayer(Player player) throws AreaPlayerAlreadyExistsException {
-		
-		if ((Main.getAreaPlayerManager().getAreaPlayerByPlayer(player)) != null) { throw new AreaPlayerAlreadyExistsException("An AreaPlayer instance for the player " + player.getName() + " already exists: " + Main.getAreaPlayerManager().getAreaPlayerByPlayer(player)); }
-		
+
+		if ((Main.getAreaPlayerManager().getAreaPlayerByPlayer(player)) != null) {
+			throw new AreaPlayerAlreadyExistsException("An AreaPlayer instance for the player " + player.getName()
+					+ " already exists: " + Main.getAreaPlayerManager().getAreaPlayerByPlayer(player));
+		}
+
 		this.player = player.getPlayer();
 
 		this.uuid = player.getUniqueId();
@@ -55,7 +58,7 @@ public class AreaPlayer {
 		this.protectionItem = createProtectionItem();
 
 		this.pendingMessages = new ArrayList<String>();
-		
+
 		sendMessages();
 	}
 
@@ -88,9 +91,11 @@ public class AreaPlayer {
 				enterArea(newArea);
 			}
 		} else {
-			leaveArea(currentArea);
+			if (currentArea != null) {
+				leaveArea(currentArea);
+			}
 		}
-		
+
 		currentArea = newArea;
 	}
 
@@ -100,7 +105,7 @@ public class AreaPlayer {
 		Bukkit.getPluginManager().callEvent(areaLeaveEvent);
 
 	}
-	
+
 	private void enterArea(Area area) {
 
 		AreaEnterEvent areaEnterEvent = new AreaEnterEvent(area, this.getPlayer());
@@ -163,21 +168,24 @@ public class AreaPlayer {
 
 	public void sendMessage(String message) {
 		this.pendingMessages.add(message);
-		//System.out.println("Added message " + message + " at millis " + System.currentTimeMillis() + "\n");
+		// System.out.println("Added message " + message + " at millis " +
+		// System.currentTimeMillis() + "\n");
 	}
 
 	private void sendMessages() {
-		
+
 		Bukkit.getScheduler().runTaskTimer(Main.getInstance(), new Runnable() {
-			
+
 			ArrayList<String> localPendingMessages;
-			
+
 			@Override
 			public void run() {
 				localPendingMessages = pendingMessages;
 				if (localPendingMessages.size() > 0) {
-					getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', localPendingMessages.get(0)) + "§r");
-					//System.out.println("Dispatched message " + localPendingMessages.get(0) + " at millis " + System.currentTimeMillis() + "\n");
+					getPlayer().sendMessage(
+							ChatColor.translateAlternateColorCodes('&', localPendingMessages.get(0)) + "§r");
+					// System.out.println("Dispatched message " + localPendingMessages.get(0) + " at
+					// millis " + System.currentTimeMillis() + "\n");
 					localPendingMessages.remove(0);
 				}
 			}
