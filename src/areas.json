@@ -1,0 +1,22 @@
+{
+  "Areas": [
+    {
+      "areaName": "Example",
+      "enabled":false,
+      "firstPoint":[0,0,0],
+      "secondPoint":[0,0,0],
+      "locationString":"Location{}",
+      "overlappable":false,
+      "areaFlags":[
+        {
+          "flagName":"BUILD",
+          "allow":false
+        },
+        {
+          "flagName":"ENTER",
+          "allow":false
+        }
+      ]
+    }
+  ]
+}

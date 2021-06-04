@@ -1,0 +1,7 @@
+name: AreaProtection
+main: com.gasaferic.areaprotection.main.Main
+version: 1.0.0
+author: Gasaferic
+commands:
+  protectionmode:
+  area:
