@@ -28,3 +28,4 @@ bin/com/gasaferic/areaprotection/model/AreaPlayer.class
 bin/com/gasaferic/areaprotection/model/Selection.class
 bin/config.yml
 bin/plugin.yml
+bin/com/gasaferic/areaprotection/exceptions/AreaPlayerAlreadyExistsException.class

@@ -69,6 +69,7 @@ public class AreaCommand implements CommandExecutor {
 					areaManager.registerArea(area);
 					areaPlayer.sendMessage(
 							"&c&lGestione Area &f&l> &7Hai creato l'area &a" + args[1] + " &7con successo.");
+					Main.updateAreaForOnlinePlayers(area, false);
 				} else {
 					areaPlayer.sendMessage("&c&lGestione Area &f&l> &7Quest'area è in conflitto con l'area &c"
 							+ overlappingArea.getAreaName());

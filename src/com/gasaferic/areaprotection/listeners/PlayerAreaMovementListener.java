@@ -17,7 +17,7 @@ public class PlayerAreaMovementListener implements Listener {
 	@EventHandler
 	public void onAreaEnterEvent(AreaEnterEvent e) {
 		Player player = e.getPlayer();
-		AreaPlayer areaPlayer = new AreaPlayer(player);
+		AreaPlayer areaPlayer = areaPlayerManager.getAreaPlayerByPlayer(player);
 
 		areaPlayer.sendMessage("&7&lSei entrato nell'area &a" + e.getArea().getAreaName());
 
@@ -26,7 +26,7 @@ public class PlayerAreaMovementListener implements Listener {
 	@EventHandler
 	public void onAreaLeaveEvent(AreaLeaveEvent e) {
 		Player player = e.getPlayer();
-		AreaPlayer areaPlayer = new AreaPlayer(player);
+		AreaPlayer areaPlayer = areaPlayerManager.getAreaPlayerByPlayer(player);
 
 		areaPlayer.sendMessage("&7&lSei uscito dall'area &c" + e.getArea().getAreaName());
 

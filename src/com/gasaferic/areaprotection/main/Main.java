@@ -17,7 +17,7 @@ import org.json.simple.parser.ParseException;
 
 import com.gasaferic.areaprotection.commands.AreaCommand;
 import com.gasaferic.areaprotection.commands.ProtectionMode;
-import com.gasaferic.areaprotection.events.AreaEnterEvent;
+import com.gasaferic.areaprotection.exceptions.AreaPlayerAlreadyExistsException;
 import com.gasaferic.areaprotection.listeners.CommandListener;
 import com.gasaferic.areaprotection.listeners.CustomPlayerRegistering;
 import com.gasaferic.areaprotection.listeners.PlayerAreaMovementListener;
@@ -50,8 +50,6 @@ public class Main extends JavaPlugin {
 
 		areasJSON = new File(this.getDataFolder(), "areas.json");
 
-		registerConfig();
-
 		areaPlayerManager = new AreaPlayerManager();
 		areaManager = new AreaManager();
 
@@ -72,6 +70,8 @@ public class Main extends JavaPlugin {
 		PluginDescriptionFile pdfFile = getDescription();
 
 		areaPlayerManager.disableSetupMode();
+
+		areaPlayerManager.unregisterAreaPlayers();
 
 		saveAreas();
 
@@ -143,21 +143,26 @@ public class Main extends JavaPlugin {
 
 	}
 
+	public static void updateAreaForOnlinePlayers(Area area, boolean removed) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			areaPlayerManager.getAreaPlayerByPlayer(player)
+					.updateCurrentArea(areaManager.getAreaByLocation(player.getLocation()));
+		}
+	}
+
 	public void registerOnlinePlayers() {
 		if (Bukkit.getOnlinePlayers().size() > 0) {
 			for (Player player : Bukkit.getOnlinePlayers()) {
+				AreaPlayer areaPlayer;
+				try {
+					areaPlayer = new AreaPlayer(player);
+					areaPlayerManager.registerAreaPlayer(areaPlayer);
 
-				AreaPlayer areaPlayer = new AreaPlayer(player);
-				Area area = areaManager.getAreaByLocation(player.getLocation());
-
-				if (area != null) {
-					AreaEnterEvent areaEnterEvent = new AreaEnterEvent(area, areaPlayer.getPlayer());
-					Bukkit.getPluginManager().callEvent(areaEnterEvent);
+					Area area = areaManager.getAreaByLocation(player.getLocation());
+					areaPlayer.updateCurrentArea(area);
+				} catch (AreaPlayerAlreadyExistsException e) {
+					e.printStackTrace();
 				}
-
-				areaPlayer.setCurrentArea(area);
-
-				areaPlayerManager.registerAreaPlayer(areaPlayer);
 			}
 		}
 	}
@@ -168,10 +173,6 @@ public class Main extends JavaPlugin {
 
 	public String getPrefixString(String string) {
 		return ChatColor.translateAlternateColorCodes('&', getConfig().getString(string));
-	}
-
-	public void registerConfig() {
-		saveDefaultConfig();
 	}
 
 	public static Location locationFromString(String loc) {

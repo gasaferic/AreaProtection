@@ -42,13 +42,22 @@ public class AreaPlayerManager {
 	}
 
 	public void registerAreaPlayer(AreaPlayer areaPlayer) {
-		this.areaPlayers.add(areaPlayer);
+		if (!areaPlayers.contains(areaPlayer) && getAreaPlayerByPlayer(areaPlayer.getPlayer()) == null) {
+			this.areaPlayers.add(areaPlayer);
+		}
 	}
 
 	public void unregisterAreaPlayer(AreaPlayer areaPlayer) {
 		if (areaPlayers.contains(areaPlayer)) {
 			areaPlayers.remove(areaPlayer);
 		}
+	}
+
+	public void unregisterAreaPlayers() {
+		areaPlayers.iterator().forEachRemaining((areaPlayer) -> {
+			areaPlayer = null;
+			areaPlayers.remove(areaPlayer);
+		});
 	}
 
 	public void disableSetupMode() {

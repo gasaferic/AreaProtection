@@ -12,6 +12,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.gasaferic.areaprotection.events.AreaEnterEvent;
+import com.gasaferic.areaprotection.events.AreaLeaveEvent;
+import com.gasaferic.areaprotection.exceptions.AreaPlayerAlreadyExistsException;
 import com.gasaferic.areaprotection.main.Main;
 
 import net.md_5.bungee.api.ChatColor;
@@ -32,13 +35,14 @@ public class AreaPlayer {
 	private Selection selection;
 	private ItemStack protectionItem;
 
-	private boolean sendingMessages;
 	private ArrayList<String> pendingMessages;
 
 	private ItemStack[] inventoryContents;
 
-	public AreaPlayer(Player player) {
-
+	public AreaPlayer(Player player) throws AreaPlayerAlreadyExistsException {
+		
+		if ((Main.getAreaPlayerManager().getAreaPlayerByPlayer(player)) != null) { throw new AreaPlayerAlreadyExistsException("An AreaPlayer instance for the player " + player.getName() + " already exists: " + Main.getAreaPlayerManager().getAreaPlayerByPlayer(player)); }
+		
 		this.player = player.getPlayer();
 
 		this.uuid = player.getUniqueId();
@@ -50,8 +54,9 @@ public class AreaPlayer {
 
 		this.protectionItem = createProtectionItem();
 
-		this.sendingMessages = false;
 		this.pendingMessages = new ArrayList<String>();
+		
+		sendMessages();
 	}
 
 	public Player getPlayer() {
@@ -74,8 +79,33 @@ public class AreaPlayer {
 		return currentArea;
 	}
 
-	public void setCurrentArea(Area currentArea) {
-		this.currentArea = currentArea;
+	public void updateCurrentArea(Area newArea) {
+		if (newArea != null) {
+			if (currentArea != null) {
+				leaveArea(currentArea);
+				enterArea(newArea);
+			} else {
+				enterArea(newArea);
+			}
+		} else {
+			leaveArea(currentArea);
+		}
+		
+		currentArea = newArea;
+	}
+
+	private void leaveArea(Area area) {
+
+		AreaLeaveEvent areaLeaveEvent = new AreaLeaveEvent(area, this.getPlayer());
+		Bukkit.getPluginManager().callEvent(areaLeaveEvent);
+
+	}
+	
+	private void enterArea(Area area) {
+
+		AreaEnterEvent areaEnterEvent = new AreaEnterEvent(area, this.getPlayer());
+		Bukkit.getPluginManager().callEvent(areaEnterEvent);
+
 	}
 
 	public boolean protectionModeEnabled() {
@@ -132,22 +162,23 @@ public class AreaPlayer {
 	}
 
 	public void sendMessage(String message) {
-		if (!sendingMessages) {
-			sendMessages();
-		}
-
 		this.pendingMessages.add(message);
+		//System.out.println("Added message " + message + " at millis " + System.currentTimeMillis() + "\n");
 	}
 
-	public void sendMessages() {
-		sendingMessages = true;
-
+	private void sendMessages() {
+		
 		Bukkit.getScheduler().runTaskTimer(Main.getInstance(), new Runnable() {
+			
+			ArrayList<String> localPendingMessages;
+			
 			@Override
 			public void run() {
-				if (pendingMessages.size() > 0) {
-					getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', pendingMessages.get(0)) + "§r");
-					pendingMessages.remove(0);
+				localPendingMessages = pendingMessages;
+				if (localPendingMessages.size() > 0) {
+					getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', localPendingMessages.get(0)) + "§r");
+					//System.out.println("Dispatched message " + localPendingMessages.get(0) + " at millis " + System.currentTimeMillis() + "\n");
+					localPendingMessages.remove(0);
 				}
 			}
 		}, 5l, 0l);

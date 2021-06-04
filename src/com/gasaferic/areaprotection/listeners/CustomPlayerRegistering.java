@@ -1,14 +1,12 @@
 package com.gasaferic.areaprotection.listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.gasaferic.areaprotection.events.AreaEnterEvent;
-import com.gasaferic.areaprotection.events.AreaLeaveEvent;
+import com.gasaferic.areaprotection.exceptions.AreaPlayerAlreadyExistsException;
 import com.gasaferic.areaprotection.main.Main;
 import com.gasaferic.areaprotection.managers.AreaManager;
 import com.gasaferic.areaprotection.managers.AreaPlayerManager;
@@ -24,15 +22,18 @@ public class CustomPlayerRegistering implements Listener {
 	public void onJoinRegister(PlayerJoinEvent e) {
 		Player player = e.getPlayer();
 		
-		AreaPlayer areaPlayer = new AreaPlayer(player);
-		areaPlayerManager.registerAreaPlayer(areaPlayer);
-		
-		Area area;
-		
-		if ((area = areaManager.getAreaByLocation(e.getPlayer().getLocation())) != null) {
-			AreaEnterEvent areaEnterEvent = new AreaEnterEvent(area, areaPlayer.getPlayer());
-			Bukkit.getPluginManager().callEvent(areaEnterEvent);
-			areaPlayer.setCurrentArea(area);
+		AreaPlayer areaPlayer;
+		try {
+			areaPlayer = new AreaPlayer(player);
+			areaPlayerManager.registerAreaPlayer(areaPlayer);
+			
+			Area area;
+			
+			if ((area = areaManager.getAreaByLocation(e.getPlayer().getLocation())) != null) {
+				areaPlayer.updateCurrentArea(area);
+			}
+		} catch (AreaPlayerAlreadyExistsException ex) {
+			ex.printStackTrace();
 		}
 		
 		// DEBUG TO CHECK REGISTERED AREAS
@@ -57,9 +58,7 @@ public class CustomPlayerRegistering implements Listener {
 		}
 		
 		if (areaPlayer.getCurrentArea() != null) {
-			AreaLeaveEvent areaLeaveEvent = new AreaLeaveEvent(areaPlayer.getCurrentArea(), areaPlayer.getPlayer());
-			Bukkit.getPluginManager().callEvent(areaLeaveEvent);
-			areaPlayer.setCurrentArea(null);
+			areaPlayer.updateCurrentArea(null);
 		}
 		
 		areaPlayerManager.unregisterAreaPlayer(areaPlayer);
