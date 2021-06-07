@@ -13,7 +13,7 @@ import com.gasaferic.areaprotection.managers.AreaPlayerManager;
 import com.gasaferic.areaprotection.model.Area;
 import com.gasaferic.areaprotection.model.AreaPlayer;
 
-public class CustomPlayerRegistering implements Listener {
+public class AreaPlayerRegistering implements Listener {
 
 	AreaPlayerManager areaPlayerManager = Main.getAreaPlayerManager();
 	AreaManager areaManager = Main.getAreaManager();

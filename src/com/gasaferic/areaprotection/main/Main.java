@@ -19,7 +19,7 @@ import com.gasaferic.areaprotection.commands.AreaCommand;
 import com.gasaferic.areaprotection.commands.ProtectionMode;
 import com.gasaferic.areaprotection.exceptions.AreaPlayerAlreadyExistsException;
 import com.gasaferic.areaprotection.listeners.CommandListener;
-import com.gasaferic.areaprotection.listeners.CustomPlayerRegistering;
+import com.gasaferic.areaprotection.listeners.AreaPlayerRegistering;
 import com.gasaferic.areaprotection.listeners.PlayerAreaMovementListener;
 import com.gasaferic.areaprotection.listeners.PlayerFlagListener;
 import com.gasaferic.areaprotection.listeners.PlayerInteractionListener;
@@ -81,7 +81,7 @@ public class Main extends JavaPlugin {
 
 	public void registerEvents() {
 
-		registerEvent(new CustomPlayerRegistering());
+		registerEvent(new AreaPlayerRegistering());
 
 		registerEvent(new ProtectionMode());
 		registerEvent(new PlayerMovementListener());
