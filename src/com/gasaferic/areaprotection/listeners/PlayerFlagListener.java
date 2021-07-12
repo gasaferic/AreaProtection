@@ -5,9 +5,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 
 import com.gasaferic.areaprotection.enums.AreaFlagTypes;
 import com.gasaferic.areaprotection.main.Main;
@@ -50,12 +50,16 @@ public class PlayerFlagListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerPickupItemEvent(PlayerPickupItemEvent e) {
-		AreaPlayer customPlayer = areaPlayerManager.getAreaPlayerByPlayer(e.getPlayer());
+	public void onPlayerPickupItemEvent(EntityPickupItemEvent e) {
+		if (!(e.getEntity() instanceof Player)) { return; }
+		
+		Player player = (Player) e.getEntity();
+		
+		AreaPlayer customPlayer = areaPlayerManager.getAreaPlayerByPlayer(player);
 
 		Area area = customPlayer.getCurrentArea();
 
-		if (area != null && !area.getAreaFlags().isPlayerAllowedByFlag(e.getPlayer(), AreaFlagTypes.PICKUP_ITEM)) {
+		if (area != null && !area.getAreaFlags().isPlayerAllowedByFlag(player, AreaFlagTypes.PICKUP_ITEM)) {
 			customPlayer.sendMessage("&c&lAreaProtection &7Non puoi raccogliere gli oggetti in questa area!");
 			e.setCancelled(true);
 		}

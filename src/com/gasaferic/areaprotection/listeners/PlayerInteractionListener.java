@@ -28,7 +28,7 @@ public class PlayerInteractionListener implements Listener {
 		AreaPlayer areaPlayer = areaPlayerManager.getAreaPlayerByPlayer(event.getPlayer());
 		
 		if (areaPlayer.protectionModeEnabled()
-				&& event.getPlayer().getItemInHand().equals(areaPlayer.getProtectionItem())) {
+				&& event.getPlayer().getInventory().getItemInMainHand().equals(areaPlayer.getProtectionItem())) {
 			event.setCancelled(true);
 			if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
 				if (areaPlayer.getSelection().getFirstPos() != null && areaPlayer.getSelection().getFirstPos().equals(currentPos)) { return; }

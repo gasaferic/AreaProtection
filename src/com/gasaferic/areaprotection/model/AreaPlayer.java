@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -16,8 +17,6 @@ import com.gasaferic.areaprotection.events.AreaEnterEvent;
 import com.gasaferic.areaprotection.events.AreaLeaveEvent;
 import com.gasaferic.areaprotection.exceptions.AreaPlayerAlreadyExistsException;
 import com.gasaferic.areaprotection.main.Main;
-
-import net.md_5.bungee.api.ChatColor;
 
 public class AreaPlayer {
 
@@ -154,11 +153,11 @@ public class AreaPlayer {
 		List<String> protectionItemLore = Arrays.asList("§7Tasto-Sinistro per selezionare il primo punto",
 				"§7Tasto-Destro per selezionare il secondo punto");
 
-		return getSetupItem(Material.GOLD_SPADE, (byte) 0, "§4§lOggetto Protezione", protectionItemLore);
+		return getSetupItem(Material.GOLDEN_SHOVEL, "§4§lOggetto Protezione", protectionItemLore);
 	}
 
-	public ItemStack getSetupItem(Material type, byte data, String name, List<String> lore) {
-		ItemStack setupItem = new ItemStack(type, 1, data);
+	public ItemStack getSetupItem(Material type, String name, List<String> lore) {
+		ItemStack setupItem = new ItemStack(type, 1);
 		ItemMeta itemMeta = setupItem.getItemMeta();
 		itemMeta.setLore(lore);
 		itemMeta.setDisplayName(name);
