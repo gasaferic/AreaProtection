@@ -5,9 +5,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 
 import com.gasaferic.areaprotection.enums.AreaFlagTypes;
 import com.gasaferic.areaprotection.main.Main;
@@ -27,7 +27,7 @@ public class PlayerFlagListener implements Listener {
 
 		Area area = areaManager.getAreaByLocation(e.getBlock().getLocation());
 
-		if (area != null && !area.getAreaFlags().isPlayerAllowedByFlag(player, AreaFlagTypes.BUILD)) {
+		if (area != null && (!area.getAreaFlags().isPlayerAllowedByFlag(player, AreaFlagTypes.BUILD) && !area.isAreaOwner(player))) {
 			areaPlayerManager.getAreaPlayerByPlayer(player)
 					.sendMessage("&c&lAreaProtection &7Non puoi piazzare blocchi in questa area!");
 			e.setCancelled(true);
@@ -41,7 +41,7 @@ public class PlayerFlagListener implements Listener {
 
 		Area area = areaManager.getAreaByLocation(e.getBlock().getLocation());
 
-		if (area != null && !area.getAreaFlags().isPlayerAllowedByFlag(player, AreaFlagTypes.BREAK)) {
+		if (area != null && (!area.getAreaFlags().isPlayerAllowedByFlag(player, AreaFlagTypes.BREAK) && !area.isAreaOwner(player))) {
 			areaPlayerManager.getAreaPlayerByPlayer(player)
 					.sendMessage("&c&lAreaProtection &7Non puoi distruggere i blocchi di questa area!");
 			e.setCancelled(true);
@@ -50,16 +50,14 @@ public class PlayerFlagListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerPickupItemEvent(EntityPickupItemEvent e) {
-		if (!(e.getEntity() instanceof Player)) { return; }
-		
-		Player player = (Player) e.getEntity();
+	public void onPlayerPickupItemEvent(PlayerPickupItemEvent e) {
+		Player player = (Player) e.getPlayer();
 		
 		AreaPlayer customPlayer = areaPlayerManager.getAreaPlayerByPlayer(player);
 
 		Area area = customPlayer.getCurrentArea();
 
-		if (area != null && !area.getAreaFlags().isPlayerAllowedByFlag(player, AreaFlagTypes.PICKUP_ITEM)) {
+		if (area != null && (!area.getAreaFlags().isPlayerAllowedByFlag(player, AreaFlagTypes.PICKUP_ITEM) && !area.isAreaOwner(player))) {
 			customPlayer.sendMessage("&c&lAreaProtection &7Non puoi raccogliere gli oggetti in questa area!");
 			e.setCancelled(true);
 		}
@@ -72,7 +70,7 @@ public class PlayerFlagListener implements Listener {
 
 		Area area = customPlayer.getCurrentArea();
 
-		if (area != null && !area.getAreaFlags().isPlayerAllowedByFlag(e.getPlayer(), AreaFlagTypes.DROP_ITEM)) {
+		if (area != null && (!area.getAreaFlags().isPlayerAllowedByFlag(e.getPlayer(), AreaFlagTypes.DROP_ITEM) && !area.isAreaOwner(e.getPlayer()))) {
 			customPlayer.sendMessage("&c&lAreaProtection &7Non puoi buttare a terra gli oggetti in questa area!");
 			e.setCancelled(true);
 		}
@@ -85,7 +83,7 @@ public class PlayerFlagListener implements Listener {
 
 		Area area = customPlayer.getCurrentArea();
 
-		if (area != null && !area.getAreaFlags().isPlayerAllowedByFlag(e.getPlayer(), AreaFlagTypes.BLOCK_INTERACT)) {
+		if (area != null && (!area.getAreaFlags().isPlayerAllowedByFlag(e.getPlayer(), AreaFlagTypes.BLOCK_INTERACT) && !area.isAreaOwner(e.getPlayer()))) {
 			customPlayer.sendMessage("&c&lAreaProtection &7Non puoi interagire con i blocchi di quest'area!");
 			e.setCancelled(true);
 		}

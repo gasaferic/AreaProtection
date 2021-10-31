@@ -2,6 +2,7 @@ package com.gasaferic.areaprotection.commands;
 
 import java.util.ArrayList;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -211,8 +212,8 @@ public class AreaCommand implements CommandExecutor {
 
 		stringBuilder.append("             &f&l(?) &c&lInformazioni Area &f&l(?)&r\n\n\n");
 		stringBuilder.append("  &cNome Area &f&l- &7" + area.getAreaName() + "\n");
-		stringBuilder.append("  &cNome Proprietario &f&l- &7" + area.getAreaOwner().getName() + "\n");
-		stringBuilder.append("  &cUUID Proprietario &f&l- &7" + area.getAreaOwner().getUniqueId() + "\n");
+		stringBuilder.append("  &cNome Proprietario &f&l- &7" + Bukkit.getPlayer(area.getAreaOwner()).getName() + "\n");
+		stringBuilder.append("  &cUUID Proprietario &f&l- &7" + area.getAreaOwner() + "\n");
 		stringBuilder.append("  &cPunti Area &f&l- &cFirst Pos &7(" + area.getFirstPos().toString()
 				+ ") &cSecond Pos &7 (" + area.getSecondPos().toString() + ")\n");
 		stringBuilder.append("  &cMondo Area &f&l- &7" + area.getAreaLocation().getWorld().getName() + "\n");

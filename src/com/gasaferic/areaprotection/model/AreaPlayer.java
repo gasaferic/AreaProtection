@@ -153,7 +153,7 @@ public class AreaPlayer {
 		List<String> protectionItemLore = Arrays.asList("§7Tasto-Sinistro per selezionare il primo punto",
 				"§7Tasto-Destro per selezionare il secondo punto");
 
-		return getSetupItem(Material.GOLDEN_SHOVEL, "§4§lOggetto Protezione", protectionItemLore);
+		return getSetupItem(Material.GOLD_SPADE, "§4§lOggetto Protezione", protectionItemLore);
 	}
 
 	public ItemStack getSetupItem(Material type, String name, List<String> lore) {

@@ -42,7 +42,7 @@ public class ProtectionMode implements CommandExecutor, Listener {
 		AreaPlayer areaPlayer = Main.getAreaPlayerManager().getAreaPlayerByPlayer((Player) event.getWhoClicked());
 
 		if (areaPlayer.protectionModeEnabled()) {
-			areaPlayer.getPlayer().playSound(areaPlayer.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 5, 1);
+			areaPlayer.getPlayer().playSound(areaPlayer.getPlayer().getLocation(), Sound.NOTE_BASS, 5, 1);
 			event.setCancelled(true);
 		}
 	}
@@ -53,7 +53,7 @@ public class ProtectionMode implements CommandExecutor, Listener {
 		AreaPlayer areaPlayer = Main.getAreaPlayerManager().getAreaPlayerByPlayer(event.getPlayer());
 
 		if (areaPlayer.protectionModeEnabled()) {
-			areaPlayer.getPlayer().playSound(areaPlayer.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 5, 1);
+			areaPlayer.getPlayer().playSound(areaPlayer.getPlayer().getLocation(), Sound.NOTE_BASS, 5, 1);
 			event.setCancelled(true);
 		}
 	}

@@ -1,14 +1,17 @@
 package com.gasaferic.areaprotection.model;
 
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 public class Area {
 
 	private String areaName;
 	
-	private OfflinePlayer areaOwner;
+	private UUID areaOwner;
 
 	private Vector firstPos;
 	private Vector secondPos;
@@ -30,7 +33,7 @@ public class Area {
 	public Area(String areaName, OfflinePlayer areaOwner, Selection selection, Location areaLocation, boolean overlappable, AreaFlags areaFlags,
 			boolean enabled) {
 		this.areaName = areaName;
-		this.areaOwner = areaOwner;
+		this.areaOwner = areaOwner.getUniqueId();
 		this.firstPos = selection.getFirstPos();
 		this.secondPos = selection.getSecondPos();
 		this.areaLocation = areaLocation;
@@ -58,16 +61,24 @@ public class Area {
 		this.areaName = areaName;
 	}
 
-	public OfflinePlayer getAreaOwner() {
+	public UUID getAreaOwner() {
 		return areaOwner;
 	}
 
 	public void setAreaOwner(OfflinePlayer areaOwner) {
-		this.areaOwner = areaOwner;
+		this.areaOwner = areaOwner.getUniqueId();
 	}
 	
-	public boolean isAreaOwner(OfflinePlayer player) {
-		return this.areaOwner.equals(player) || this.areaOwner == null;
+	public boolean isAreaOwner(Player player) {
+		return this.areaOwner.equals(player.getUniqueId()) || this.areaOwner == null;
+	}
+	
+	public boolean isAreaOwner(OfflinePlayer offlinePlayer) {
+		return this.areaOwner.equals(offlinePlayer.getUniqueId()) || this.areaOwner == null;
+	}
+	
+	public boolean isAreaOwner(UUID uniqueId) {
+		return this.areaOwner.equals(uniqueId) || this.areaOwner == null;
 	}
 
 	public Location getAreaLocation() {

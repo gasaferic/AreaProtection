@@ -62,7 +62,7 @@ public class PlayerMovementListener implements Listener {
 
 	public void kickBack(Player player, Location from) {
 		player.teleport(from);
-		player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1);
+		player.playSound(player.getLocation(), Sound.GHAST_FIREBALL, 1, 1);
 	}
 
 	public boolean canEnterArea(Player player, Area area) {

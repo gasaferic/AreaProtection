@@ -55,7 +55,7 @@ public class AreaSaver {
 		JSONObject areaJSONObj = new JSONObject();
 
 		areaJSONObj.put("areaName", area.getAreaName());
-		areaJSONObj.put("areaOwnerUUID", area.getAreaOwner().getUniqueId().toString());
+		areaJSONObj.put("areaOwnerUUID", area.getAreaOwner().toString());
 		areaJSONObj.put("enabled", area.isEnabled());
 		areaJSONObj.put("firstPoint", getJSONArrayFromVector(area.getFirstPos()));
 		areaJSONObj.put("secondPoint", getJSONArrayFromVector(area.getSecondPos()));
