@@ -30,10 +30,10 @@ public class Area {
 
 	private AreaFlags areaFlags;
 
-	public Area(String areaName, OfflinePlayer areaOwner, Selection selection, Location areaLocation, boolean overlappable, AreaFlags areaFlags,
+	public Area(String areaName, UUID areaOwnerUniqueId, Selection selection, Location areaLocation, boolean overlappable, AreaFlags areaFlags,
 			boolean enabled) {
 		this.areaName = areaName;
-		this.areaOwner = areaOwner.getUniqueId();
+		this.areaOwner = areaOwnerUniqueId;
 		this.firstPos = selection.getFirstPos();
 		this.secondPos = selection.getSecondPos();
 		this.areaLocation = areaLocation;

@@ -63,7 +63,7 @@ public class AreaCommand implements CommandExecutor {
 			areaPlayer.sendMessage("&c&lGestione Area &f&l> &cDevi inserire un nome per l'area");
 		} else {
 			if (!areaManager.areaAlreadyExists(args[1])) {
-				Area area = new Area(args[1], areaPlayer.getPlayer(), areaPlayer.getSelection(),
+				Area area = new Area(args[1], areaPlayer.getPlayer().getUniqueId(), areaPlayer.getSelection(),
 						areaPlayer.getPlayer().getLocation(), false, new AreaFlags(), true);
 
 				Area overlappingArea;

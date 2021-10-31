@@ -93,7 +93,7 @@ public class AreaLoader {
 			enabled = (boolean) areaJSONObj.get("enabled");
 		}
 
-		return new Area(areaName, areaOwner, selection, location, overlappable, areaFlags, enabled);
+		return new Area(areaName, areaOwner.getUniqueId(), selection, location, overlappable, areaFlags, enabled);
 
 	}
 

@@ -1,5 +1,7 @@
 package com.gasaferic.areaprotection.api;
 
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -32,8 +34,8 @@ public class AreaProtectionAPI {
 		return areaManager.getAreaFromName(areaName);
 	}
 	
-	public Area createNewArea(String areaName, Player areaOwner, Selection selection, Location location, boolean overlappable, AreaFlags areaFlags, boolean enabled) {
-		return new Area(areaName, areaOwner, selection, location, overlappable, areaFlags, enabled);
+	public Area createNewArea(String areaName, UUID areaOwnerUniqueId, Selection selection, Location location, boolean overlappable, AreaFlags areaFlags, boolean enabled) {
+		return new Area(areaName, areaOwnerUniqueId, selection, location, overlappable, areaFlags, enabled);
 	}
 	
 	public AreaManager getAreaManager() {
